@@ -9,12 +9,18 @@ import sys
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 
 # Load C Library
-dll_path = os.path.join(os.path.dirname(__file__), 'banckqueue_v2.dll')
+lib_name = 'banckqueue_v2.dll' if os.name == 'nt' else 'libbanckqueue.so'
+dll_path = os.path.join(os.path.dirname(__file__), lib_name)
+
 try:
     c_queue = ctypes.CDLL(dll_path)
-except OSError:
-    print(f"Error loading DLL from {dll_path}")
-    sys.exit(1)
+except OSError as e:
+    print(f"Error loading Library from {dll_path}: {e}")
+    # Fallback to try finding it in current directory if absolute path fails
+    try:
+        c_queue = ctypes.CDLL(lib_name)
+    except OSError:
+        sys.exit(1)
 
 # Define C structures and return types
 class CustomerData(ctypes.Structure):
