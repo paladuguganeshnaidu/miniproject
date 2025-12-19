@@ -12,6 +12,12 @@ app = Flask(__name__, static_folder='../frontend', static_url_path='')
 lib_name = 'banckqueue_v2.dll' if os.name == 'nt' else 'libbanckqueue.so'
 dll_path = os.path.join(os.path.dirname(__file__), lib_name)
 
+# Auto-compile for Linux if missing (Fallback if build script didn't run)
+if os.name != 'nt' and not os.path.exists(dll_path):
+    print("Library not found. Attempting to compile...")
+    src_path = os.path.join(os.path.dirname(__file__), 'banckqueue.c')
+    os.system(f"gcc -shared -o {dll_path} {src_path} -fPIC")
+
 try:
     c_queue = ctypes.CDLL(dll_path)
 except OSError as e:
@@ -20,6 +26,7 @@ except OSError as e:
     try:
         c_queue = ctypes.CDLL(lib_name)
     except OSError:
+        print("CRITICAL: Could not load C library. Exiting.")
         sys.exit(1)
 
 # Define C structures and return types
