@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Linked List Bank Queue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Controller Panel -->
+        <div class="panel">
+            <div class="header">
+                <div class="brand">DS<span>Bank</span></div>
+                <p style="color: var(--text-light); font-size: 0.9rem;">Queue Management System</p>
+                <p style="color: var(--accent); font-size: 0.75rem; margin-top: 5px;">Powered by Singly Linked List (JS)
+                </p>
+            </div>
+
+            <div class="control-group">
+                <div class="input-wrapper">
+                    <input type="text" id="customerName" placeholder="Enter Customer Name" autocomplete="off">
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn-primary" id="btnEnqueue">Enqueue (Add)</button>
+                    <button class="btn-secondary" id="btnPeek">Peek (Next)</button>
+                    <button class="btn-secondary" id="btnDequeue">Dequeue (Serve)</button>
+                </div>
+            </div>
+
+            <div class="status-bar">
+                <span id="statusText" class="status neutral">System Ready. Queue is empty.</span>
+            </div>
+
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                <h4
+                    style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.5rem;">
+                    Data Structure Stats</h4>
+                <div style="font-size: 0.8rem; font-family: monospace; color: var(--primary);">
+                    Structure: Singly Linked List<br>
+                    Logic: FIFO (First-In, First-Out)
+                </div>
+            </div>
+        </div>
+
+        <!-- Display Panel -->
+        <div class="queue-section">
+            <div id="currentServing" class="serving-area">
+                <!-- Serving Card Appears Here -->
+            </div>
+
+            <div>
+                <h2 class="section-title">Current Queue</h2>
+                <div id="queueDisplay" class="queue-list">
+                    <!-- Queue Items Render Here -->
+                    <div class="empty-message">Queue is currently empty</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
