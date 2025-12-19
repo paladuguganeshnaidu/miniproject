@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NCET Bank - Assisted Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation for Switching Views -->
+  <div class="view-switcher">
+    <button class="switch-btn active" onclick="switchView('kiosk')">Customer Kiosk</button>
+    <button class="switch-btn" onclick="switchView('teller')">Teller Station</button>
+  </div>
+
+  <!-- KIOSK VIEW -->
+  <section id="kioskView" class="view-section active">
+    <div class="glass-card kiosk-container">
+      <h1 class="brand-title">NCET Bank</h1>
+      <p class="subtitle">Welcome. Please join the queue for assistance.</p>
+
+      <form id="kioskForm" onsubmit="handleJoinQueue(event)">
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="custName" placeholder="Enter your name" required>
+        </div>
+
+        <div class="service-selector">
+          <div class="category-group">
+            <h3>Transaction & Service Options</h3>
+            <div class="option-grid">
+              <label class="service-option">
+                <input type="radio" name="service" value="Open New Account" checked>
+                <div class="card-radio"><span>Open New Account</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Loan Inquiry">
+                <div class="card-radio"><span>Loan Inquiry</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Checkbook Request">
+                <div class="card-radio"><span>Checkbook Request</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Funds Transfer">
+                <div class="card-radio"><span>Funds Transfer</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Bill Payment">
+                <div class="card-radio"><span>Bill Payment</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Currency Exchange">
+                <div class="card-radio"><span>Currency Exchange</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Investment Advisory">
+                <div class="card-radio"><span>Investment Advisory</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Safe Deposit Box">
+                <div class="card-radio"><span>Safe Deposit Box</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Card Services">
+                <div class="card-radio"><span>Card Services</span></div>
+              </label>
+            </div>
+          </div>
+
+          <div class="category-group">
+            <h3>Technical & Account</h3>
+            <div class="option-grid">
+              <label class="service-option">
+                <input type="radio" name="service" value="Report Lost Card">
+                <div class="card-radio"><span>Report Lost Card</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Banking Support">
+                <div class="card-radio"><span>Banking Support</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Statement Request">
+                <div class="card-radio"><span>Statement Request</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Update Contact Info">
+                <div class="card-radio"><span>Update Contact Info</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Passbook Update">
+                <div class="card-radio"><span>Passbook Update</span></div>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="service" value="Account Modification">
+                <div class="card-radio"><span>Account Modification</span></div>
+              </label>
+            </div>
+          </div>
+
+          <div class="category-group">
+            <h3>Fraud & Disputes</h3>
+            <div class="option-grid">
+              <label class="service-option">
+                <input type="radio" name="service" value="Fraud Resolution">
+                <div class="card-radio"><span>Fraud / Dispute Resolution</span></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary large">Print Ticket & Join Queue</button>
+      </form>
+    </div>
+
+    <!-- Ticket Printer Animation Overlay -->
+    <div id="ticketOverlay" class="overlay hidden">
+      <div class="ticket-machine">
+        <div class="ticket-slot">
+          <div class="ticket" id="printedTicket">
+            <div class="ticket-header">NCET Bank</div>
+            <div class="ticket-body">
+              <p>Queue Number</p>
+              <h2 id="ticketNum">A-01</h2>
+              <p id="ticketName">John Doe</p>
+              <p id="ticketService" style="font-size: 0.8rem; margin-top: 5px;">Deposit</p>
+            </div>
+            <div class="ticket-footer">Please Wait...</div>
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="closeTicket()">Take Ticket</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- TELLER VIEW -->
+  <section id="tellerView" class="view-section">
+    <div class="teller-dashboard">
+      <!-- Queue Control -->
+      <div class="glass-card control-panel">
+        <h2>Queue Control</h2>
+        <div class="stats">
+          <div class="stat-item">
+            <span class="label">Waiting</span>
+            <span class="value" id="queueCount">0</span>
+          </div>
+        </div>
+        <button class="btn-primary call-btn" onclick="callNextCustomer()">
+          📢 Call Next (LIFO)
+        </button>
+        <p class="lifo-note">Last-In, First-Out Strategy Active</p>
+      </div>
+
+      <!-- Active Service -->
+      <div class="glass-card service-panel">
+        <div id="emptyState" class="state-msg">
+          <h3>Station Closed</h3>
+          <p>Click "Call Next" to serve a customer.</p>
+        </div>
+
+        <div id="activeState" class="hidden">
+          <div class="customer-badge">
+            <div class="avatar">👤</div>
+            <div>
+              <h3 id="serveName">Alice Smith</h3>
+              <span class="badge" id="serveType">Deposit</span>
+              <span class="ticket-badge" id="serveTicket">#5</span>
+            </div>
+          </div>
+
+          <div class="operation-form">
+            <h3>Process Transaction</h3>
+            <div class="input-group">
+              <label>Amount ($)</label>
+              <input type="number" id="txnAmount" placeholder="0.00">
+            </div>
+            <div class="actions">
+              <button class="btn-success" onclick="processTxn('Complete')">Complete</button>
+              <button class="btn-danger" onclick="processTxn('Reject')">Reject</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden">Message</div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
