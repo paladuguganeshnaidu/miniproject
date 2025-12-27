@@ -25,7 +25,7 @@ EXPORT int enqueue(const char *name, const char *service_type) {
     return -1;
 
   strncpy(new_node->name, name, 99);
-  new_node->name[99] = '\0'; // Ensure null usage
+  new_node->name[99] = '\0'; // Ensure null termination
   strncpy(new_node->service_type, service_type, 99);
   new_node->service_type[99] = '\0';
 

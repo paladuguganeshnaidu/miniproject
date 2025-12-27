@@ -8,7 +8,7 @@ Directory structure
 - `build/` - Compiled executables (e.g., `bankqueue.exe` on Windows).
 - `frontend/` - Optional frontend mockup (`index.html`, `style.css`).
 - `backend/` - Flask backend with C library integration
-- `pure_js_bank/` - Pure JavaScript implementation using Singly Linked List
+- `pure_js_bank/` - Pure JavaScript implementation using singly linked list
 
 ## Features
 

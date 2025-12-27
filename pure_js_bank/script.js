@@ -192,7 +192,7 @@ function handleRevoke() {
     const revokeIdInput = document.getElementById('revokeId');
     const id = parseInt(revokeIdInput.value);
 
-    if (!id || id < 1) {
+    if (isNaN(id) || id < 1) {
         statusText.textContent = "Please enter a valid Customer ID.";
         statusText.className = "status error";
         return;
