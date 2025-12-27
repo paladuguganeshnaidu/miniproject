@@ -50,6 +50,9 @@ c_queue.peek.restype = CustomerData
 c_queue.get_count.argtypes = []
 c_queue.get_count.restype = ctypes.c_int
 
+c_queue.revoke.argtypes = [ctypes.c_int]
+c_queue.revoke.restype = CustomerData
+
 @app.route('/')
 def serve_index():
     return send_from_directory('../frontend', 'index.html')
@@ -102,6 +105,31 @@ def perform_transaction():
         'message': f'Successfully processed {action} of ${amount}',
         'new_balance': 1234.56 # Mock balance
     })
+
+@app.route('/api/queue/revoke', methods=['POST'])
+def revoke_ticket():
+    data = request.json
+    ticket_number = data.get('ticket_number')
+    
+    if ticket_number is None:
+        return jsonify({'success': False, 'message': 'Ticket number is required'}), 400
+    
+    # Call C library revoke function
+    result = c_queue.revoke(ticket_number)
+    
+    if result.success:
+        return jsonify({
+            'success': True,
+            'message': f'Ticket #{ticket_number} has been revoked',
+            'name': result.name.decode('utf-8'),
+            'service_type': result.service_type.decode('utf-8'),
+            'ticket_number': result.ticket_number
+        })
+    else:
+        return jsonify({
+            'success': False,
+            'message': f'Ticket #{ticket_number} not found in queue'
+        })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5500)

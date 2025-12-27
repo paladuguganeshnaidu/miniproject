@@ -115,6 +115,23 @@
 
         <button type="submit" class="btn-primary large">Print Ticket & Join Queue</button>
       </form>
+
+      <!-- Revoke Ticket Section -->
+      <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid rgba(255,255,255,0.1);">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #fff;">Cancel Your Ticket</h3>
+        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 1rem;">
+          Need to leave? Enter your ticket number to cancel your position in the queue.
+        </p>
+        <form id="revokeForm" onsubmit="handleRevokeTicket(event)" style="display: flex; gap: 1rem; align-items: flex-end;">
+          <div class="input-group" style="flex: 1;">
+            <label>Ticket Number</label>
+            <input type="number" id="revokeTicketNum" placeholder="Enter ticket number" required min="1">
+          </div>
+          <button type="submit" class="btn-secondary" style="height: fit-content; padding: 0.75rem 1.5rem;">
+            Cancel Ticket
+          </button>
+        </form>
+      </div>
     </div>
 
     <!-- Ticket Printer Animation Overlay -->

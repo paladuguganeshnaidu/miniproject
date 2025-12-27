@@ -54,6 +54,39 @@ class LinkedListQueue {
         return this.head;
     }
 
+    // Revoke: Remove a specific customer by ID
+    revoke(customerId) {
+        if (!this.head) return null;
+
+        let current = this.head;
+        let prev = null;
+
+        while (current) {
+            if (current.customerId === customerId) {
+                // Found the customer, remove them
+                if (prev === null) {
+                    // Removing head
+                    this.head = current.next;
+                    if (!this.head) {
+                        this.tail = null; // Queue is now empty
+                    }
+                } else {
+                    prev.next = current.next;
+                    if (!current.next) {
+                        this.tail = prev; // Removed tail, update tail pointer
+                    }
+                }
+                this.length--;
+                return current;
+            }
+            prev = current;
+            current = current.next;
+        }
+
+        // Customer not found
+        return null;
+    }
+
     // Convert to Array for display
     toArray() {
         const nodes = [];
@@ -155,10 +188,39 @@ function handlePeek() {
     statusText.className = "status neutral";
 }
 
+function handleRevoke() {
+    const revokeIdInput = document.getElementById('revokeId');
+    const id = parseInt(revokeIdInput.value);
+
+    if (!id || id < 1) {
+        statusText.textContent = "Please enter a valid Customer ID.";
+        statusText.className = "status error";
+        return;
+    }
+
+    if (queue.isEmpty()) {
+        statusText.textContent = "Queue is empty! No tickets to revoke.";
+        statusText.className = "status error";
+        return;
+    }
+
+    const node = queue.revoke(id);
+    if (node) {
+        revokeIdInput.value = '';
+        statusText.textContent = `Revoked ticket for ${node.customerName} (#${node.customerId})`;
+        statusText.className = "status success";
+        updateDisplay();
+    } else {
+        statusText.textContent = `Customer #${id} not found in queue.`;
+        statusText.className = "status error";
+    }
+}
+
 // Event Listeners
 document.getElementById('btnEnqueue').addEventListener('click', handleEnqueue);
 document.getElementById('btnDequeue').addEventListener('click', handleDequeue);
 document.getElementById('btnPeek').addEventListener('click', handlePeek);
+document.getElementById('btnRevoke').addEventListener('click', handleRevoke);
 nameInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleEnqueue();
 });

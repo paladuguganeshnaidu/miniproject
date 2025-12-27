@@ -33,6 +33,16 @@
                 </div>
             </div>
 
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.5rem;">
+                    Cancel/Revoke a Ticket</h4>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="number" id="revokeId" placeholder="Customer ID" min="1"
+                        style="flex: 1; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+                    <button class="btn-secondary" id="btnRevoke" style="padding: 0.5rem 1rem;">Revoke</button>
+                </div>
+            </div>
+
             <div class="status-bar">
                 <span id="statusText" class="status neutral">System Ready. Queue is empty.</span>
             </div>

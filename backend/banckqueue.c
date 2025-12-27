@@ -104,3 +104,49 @@ EXPORT CustomerData peek() {
 
   return data;
 }
+
+// Revoke: Remove a specific ticket from the queue
+EXPORT CustomerData revoke(int ticket_number) {
+  CustomerData data;
+  data.success = 0;
+
+  if (head == NULL) {
+    return data;
+  }
+
+  Node *current = head;
+  Node *prev = NULL;
+
+  // Search for the ticket
+  while (current != NULL) {
+    if (current->ticket_number == ticket_number) {
+      // Found the ticket, remove it
+      strncpy(data.name, current->name, 100);
+      strncpy(data.service_type, current->service_type, 100);
+      data.ticket_number = current->ticket_number;
+      data.success = 1;
+
+      // Remove node from linked list
+      if (prev == NULL) {
+        // Removing head
+        head = current->next;
+        if (head == NULL) {
+          tail = NULL; // Queue is now empty
+        }
+      } else {
+        prev->next = current->next;
+        if (current->next == NULL) {
+          tail = prev; // Removed tail, update tail pointer
+        }
+      }
+
+      free(current);
+      return data;
+    }
+    prev = current;
+    current = current->next;
+  }
+
+  // Ticket not found
+  return data;
+}
