@@ -76,6 +76,36 @@ function closeTicket() {
     showToast('You are in the queue!');
 }
 
+// --- Revoke Ticket Logic ---
+async function handleRevokeTicket(e) {
+    e.preventDefault();
+    const ticketNum = parseInt(document.getElementById('revokeTicketNum').value);
+
+    if (!ticketNum || ticketNum < 1) {
+        showToast('Please enter a valid ticket number');
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_BASE}/queue/revoke`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ticket_number: ticketNum })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            showToast(`Ticket #${ticketNum} cancelled successfully`);
+            document.getElementById('revokeTicketNum').value = '';
+        } else {
+            showToast(data.message || 'Ticket not found');
+        }
+    } catch (e) {
+        showToast('Connection Failed');
+    }
+}
+
 // --- Teller Logic ---
 async function callNextCustomer() {
     try {

@@ -25,7 +25,7 @@ EXPORT int enqueue(const char *name, const char *service_type) {
     return -1;
 
   strncpy(new_node->name, name, 99);
-  new_node->name[99] = '\0'; // Ensure null usage
+  new_node->name[99] = '\0'; // Ensure null termination
   strncpy(new_node->service_type, service_type, 99);
   new_node->service_type[99] = '\0';
 
@@ -102,5 +102,51 @@ EXPORT CustomerData peek() {
   data.ticket_number = head->ticket_number;
   data.success = 1;
 
+  return data;
+}
+
+// Revoke: Remove a specific ticket from the queue
+EXPORT CustomerData revoke(int ticket_number) {
+  CustomerData data;
+  data.success = 0;
+
+  if (head == NULL) {
+    return data;
+  }
+
+  Node *current = head;
+  Node *prev = NULL;
+
+  // Search for the ticket
+  while (current != NULL) {
+    if (current->ticket_number == ticket_number) {
+      // Found the ticket, remove it
+      strncpy(data.name, current->name, 100);
+      strncpy(data.service_type, current->service_type, 100);
+      data.ticket_number = current->ticket_number;
+      data.success = 1;
+
+      // Remove node from linked list
+      if (prev == NULL) {
+        // Removing head
+        head = current->next;
+        if (head == NULL) {
+          tail = NULL; // Queue is now empty
+        }
+      } else {
+        prev->next = current->next;
+        if (current->next == NULL) {
+          tail = prev; // Removed tail, update tail pointer
+        }
+      }
+
+      free(current);
+      return data;
+    }
+    prev = current;
+    current = current->next;
+  }
+
+  // Ticket not found
   return data;
 }
