@@ -9,7 +9,7 @@ import sys
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 
 # Load C Library
-lib_name = 'banckqueue.dll' if os.name == 'nt' else 'libbanckqueue.so'
+lib_name = 'banckqueue_v2.dll' if os.name == 'nt' else 'libbanckqueue.so'
 dll_path = os.path.join(os.path.dirname(__file__), lib_name)
 
 # Auto-compile for Linux if missing (Fallback if build script didn't run)

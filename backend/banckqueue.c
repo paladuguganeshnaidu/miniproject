@@ -16,7 +16,7 @@ typedef struct Node {
 } Node;
 
 Node *head = NULL;
-
+Node *tail = NULL; // Added tail pointer for FIFO
 int ticket_counter = 1;
 
 EXPORT int enqueue(const char *name, const char *service_type) {
@@ -31,10 +31,17 @@ EXPORT int enqueue(const char *name, const char *service_type) {
 
   int t_num = ticket_counter++;
   new_node->ticket_number = t_num;
+  new_node->next = NULL; // New node is always at the end
 
-  // LIFO logic: Insert at head
-  new_node->next = head;
-  head = new_node;
+  // FIFO logic: Insert at tail
+  if (tail == NULL) {
+    // Queue was empty
+    head = new_node;
+    tail = new_node;
+  } else {
+    tail->next = new_node;
+    tail = new_node;
+  }
 
   return t_num;
 }
@@ -59,7 +66,7 @@ EXPORT CustomerData dequeue() {
   head = head->next;
 
   if (head == NULL) {
-    // List is empty
+    tail = NULL; // If queue becomes empty, update tail
   }
 
   strncpy(data.name, temp->name, 100);
